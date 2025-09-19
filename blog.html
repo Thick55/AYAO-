@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | AYAO Medical Centre</title>
+    <style>
+        :root {
+            --navy: #1b2a49;
+            --teal: #2fa8a0;
+            --coral: #ff6f61;
+            --gray-light: #f5f7fa;
+            --gray-dark: #555;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--navy);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--navy);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: padding 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: auto;
+            transition: width 0.3s ease;
+        }
+
+        .logo h1 {
+            font-size: 1.1rem;
+            margin: 0;
+            transition: font-size 0.3s ease;
+        }
+
+        .logo span {
+            font-size: 0.8em;
+            font-weight: normal;
+            display: block;
+            margin-top: 0.2rem;
+            transition: font-size 0.3s ease;
+        }
+
+        nav ul {
+            display: none;
+            flex-direction: column;
+            list-style: none;
+            gap: 1.5rem;
+            width: 100%;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--navy);
+            padding: 1rem 0;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .nav-links li {
+            opacity: 0;
+            transform: translateY(-20px);
+            margin: 0.5rem 0;
+        }
+
+        .nav-links li a {
+            color: var(--white);
+            display: block;
+            padding: 0.75rem 0;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: var(--coral);
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-links.active li {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 2rem;
+            height: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+        
+        .hamburger span {
+            width: 2rem;
+            height: 0.25rem;
+            background: var(--white);
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            transform: translateX(20px);
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        header.scrolled {
+            padding: 0.5rem 2rem;
+        }
+        
+        header.scrolled .logo h1 {
+            font-size: 1rem;
+        }
+        
+        header.scrolled .logo span {
+            font-size: 0.7em;
+        }
+        
+        header.scrolled .logo img {
+            width: 30px;
+        }
+
+        main {
+            padding: 3rem 2rem;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* --- ANIMATIONS & TRANSITIONS --- */
+        
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .blog-card, .sidebar-widget {
+            /* Increased animation duration for a smoother effect */
+            animation: fade-in-up 1.2s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Adjusted staggered delay */
+        .blog-card:nth-child(1) { animation-delay: 0.2s; }
+        .blog-card:nth-child(2) { animation-delay: 0.4s; }
+        .blog-card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Adjusted staggered delay */
+        .sidebar-widget:nth-child(1) { animation-delay: 0.8s; }
+        .sidebar-widget:nth-child(2) { animation-delay: 1.0s; }
+        .sidebar-widget:nth-child(3) { animation-delay: 1.2s; }
+        .sidebar-widget:nth-child(4) { animation-delay: 1.4s; }
+
+        .featured-post {
+            animation: fade-in-up 1.2s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Increased transition duration for a smoother hover effect */
+        .featured-post-img img {
+            transition: transform 0.5s ease;
+        }
+
+        .featured-post:hover .featured-post-img img {
+            transform: scale(1.05);
+        }
+
+        /* Increased transition duration for a smoother hover effect */
+        .blog-card {
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
+
+        /* --- END OF ANIMATIONS & TRANSITIONS --- */
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .blog-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        @media (min-width: 900px) {
+            .blog-container {
+                flex-direction: row;
+            }
+        }
+        
+        .blog-posts {
+            flex: 3;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--navy);
+        }
+        
+        .blog-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--teal);
+        }
+
+        .blog-content p {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+        }
+
+        .blog-meta {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 1rem;
+            display: block;
+        }
+
+        .featured-post {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .featured-post {
+                flex-direction: row;
+            }
+        }
+
+        .featured-post-img {
+            flex: 1;
+        }
+
+        .featured-post-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-post-content {
+            flex: 2;
+            padding: 2rem;
+        }
+
+        .featured-post-content h2 {
+            font-size: 2rem;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        .featured-post-content p {
+            font-size: 1rem;
+            color: var(--gray-dark);
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            display: inline-block;
+            background: var(--coral);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .read-more:hover {
+            background-color: #e55e53;
+        }
+
+        .blog-sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .sidebar-widget {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-widget h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--teal);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .categories ul, .popular-posts ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .categories a, .popular-posts a {
+            display: block;
+            padding: 0.5rem 0;
+            text-decoration: none;
+            color: var(--navy);
+            border-bottom: 1px solid #eee;
+        }
+
+        .categories a:hover, .popular-posts a:hover {
+            color: var(--coral);
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-buttons a {
+            font-size: 1.5rem;
+            color: var(--navy);
+            transition: color 0.3s ease;
+        }
+
+        .social-buttons a:hover {
+            color: var(--teal);
+        }
+
+        footer {
+            background: var(--navy);
+            color: var(--white);
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        footer h3 {
+            margin-bottom: 1rem;
+            color: var(--teal);
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer ul a {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        footer ul a:hover {
+            color: var(--coral);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .nav-links li.active-page a {
+            color: goldenrod;
+        }
+		
+		.author{
+    color: var(--gray-light);
+    font-weight: bold;
+    opacity: 1;
+  }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="AYAO Medical Centre Logo with stethoscope icon">
+            <div>
+                <h1>AYAO MEDICAL CENTRE</h1>
+                <span>(AYOHEALTH FOUNDATION)</span>
+            </div>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li class="active-page"><a href="blog.html">Blog</a></li>
+                <li><a href="contacts.html">Contact</a></li>
+            </ul>
+            <button class="hamburger" aria-controls="main-nav-menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="blog-header">
+            <h2>Latest Health News & Articles</h2>
+            <p>Stay informed with our expert insights on health, wellness, and medical breakthroughs.</p>
+        </section>
+
+        <section class="featured-post">
+            <div class="featured-post-img">
+                <img src="blog-img-featured.jpg" alt="A doctor talking to a senior patient.">
+            </div>
+            <div class="featured-post-content">
+                <h2>The Latest in Senior Health: Staying Active & Healthy</h2>
+                <p class="blog-meta">Posted on Sep 20, 2025</p>
+                <p>Learn about the best practices for senior health, from simple exercises to nutrition tips. Our experts share actionable advice to help you or your loved ones maintain a vibrant and healthy lifestyle as you age.</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
+        </section>
+
+        <section class="blog-container">
+            <div class="blog-posts">
+                <div class="blog-grid">
+                    <a href="#" class="blog-card">
+                        <img src="blog-img-1.jpg" alt="A doctor consulting with a patient in an office">
+                        <div class="blog-content">
+                            <h3>The Importance of Annual Check-ups</h3>
+                            <p>Annual health check-ups are key to preventive care. Learn why regular visits to your doctor can help you maintain good health and detect issues early.</p>
+                            <span class="blog-meta">Posted on Sep 19, 2025</span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="blog-card">
+                        <img src="blog-img-2.jpg" alt="A nurse gently holding a newborn baby">
+                        <div class="blog-content">
+                            <h3>Navigating Maternity Care with Confidence</h3>
+                            <p>Our guide covers everything from prenatal nutrition to post-delivery care. Discover how our team provides compassionate support for a healthy pregnancy and baby.</p>
+                            <span class="blog-meta">Posted on Sep 18, 2025</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="blog-card">
+                        <img src="blog-img-3.jpg" alt="Medical staff preparing to draw blood from a patient's arm">
+                        <div class="blog-content">
+                            <h3>Demystifying Common Lab Test Results</h3>
+                            <p>Understand what your blood test results really mean. We break down the most common lab tests and provide clarity on what to look for and how to interpret them.</p>
+                            <span class="blog-meta">Posted on Sep 17, 2025</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <aside class="blog-sidebar">
+                <div class="sidebar-widget search-box">
+                    <h3>Search Blog</h3>
+                    <input type="text" placeholder="Search for articles...">
+                </div>
+
+                <div class="sidebar-widget categories">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">General Health</a></li>
+                        <li><a href="#">Maternity Care</a></li>
+                        <li><a href="#">Lab & Diagnostics</a></li>
+                        <li><a href="#">Wellness</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget popular-posts">
+                    <h3>Popular Posts</h3>
+                    <ul>
+                        <li><a href="#">The Importance of Annual Check-ups</a></li>
+                        <li><a href="#">Understanding Your Blood Test Results</a></li>
+                        <li><a href="#">A Guide to Mental Wellness</a></li>
+                        <li><a href="#">Healthy Eating Habits for the Family</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget social-share">
+                    <h3>Connect with Us</h3>
+                    <div class="social-buttons">
+                        <a href="#"><img src="https://via.placeholder.com/32" alt="Facebook"></a>
+                        <a href="#"><img src="https://via.placeholder.com/32" alt="Twitter"></a>
+                        <a href="#"><img src="https://via.placeholder.com/32" alt="LinkedIn"></a>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+		
+		 <div class="full-width-map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.
+		761635428672!2d-0.18822419999998424!3d5.747417500000004!2m3!1f0!2f0!3f0!3
+		m2!1i1024!2i768!4f13.!3m3!1m2!1s0xfdf7767246d07b9%3A0x27cdfe973aaceb9!2s
+		Ayao%20Medical%20Centre!5e0!3m2!1sen!2sgh!4v1758076754858!5m2!1sen!2sgh"
+      width="100%"
+      height="100%"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p>📍 Teiman-Abokobi Road: GM-1570830</p>
+                <p>☎ +233 (0)597117751</p>
+                <p>✉ info@ayaohealth.org</p>
+            </div>
+            <div>
+                <h3>Opening Hours</h3>
+                <p>Mon – Fri: 8:00 AM – 8:00 PM</p>
+                <p>Sat: 9:00 AM – 5:00 PM</p>
+                <p>Sun & Holidays: Emergency Only</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION) | <span class="author">Designed by Thicktea Media</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+
+            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !isExpanded);
+        });
+        
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | AYAO Medical Centre</title>
+  <style>
+    :root {
+      --navy: #1b2a49;
+      --teal: #2fa8a0;
+      --coral: #ff6f61;
+      --gray-light: #f5f7fa;
+      --gray-dark: #555;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: var(--gray-light);
+      color: var(--navy);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo img {
+      width: 40px;
+      height: auto;
+    }
+
+    .logo h1 {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .logo span {
+      font-size: 0.8em;
+      font-weight: normal;
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    nav ul {
+      display: none;
+      flex-direction: column;
+      list-style: none;
+      gap: 1.5rem;
+      width: 100%;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--navy);
+      padding: 1rem 0;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .nav-links li {
+      opacity: 0;
+      transform: translateY(-20px);
+      margin: 0.5rem 0;
+    }
+
+    .nav-links li a {
+      color: var(--white);
+      display: block;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      color: var(--coral);
+    }
+
+    .nav-links.active {
+      display: flex;
+    }
+
+    .nav-links.active li {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    }
+    
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      z-index: 1001;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    
+    .hamburger span {
+      width: 2rem;
+      height: 0.25rem;
+      background: var(--white);
+      border-radius: 10px;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .hamburger.active span:nth-child(2) {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    header.scrolled {
+      padding: 0.5rem 2rem;
+    }
+    
+    header.scrolled .logo h1 {
+      font-size: 1rem;
+    }
+    
+    header.scrolled .logo span {
+      font-size: 0.7em;
+    }
+    
+    header.scrolled .logo img {
+      width: 30px;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(27, 42, 73, 0.8), rgba(27, 42, 73, 0.8)), url('Woman.jpg') center/cover no-repeat;
+      color: var(--white);
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+
+    .hero h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background: var(--teal);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: var(--coral);
+    }
+
+    section {
+      padding: 3rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .map-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      background: var(--navy);
+      color: var(--white);
+      padding: 3rem 2rem 1rem;
+    }
+
+    .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default for mobile */
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 equal columns for larger screens */
+    }
+}
+
+
+    footer h3 {
+      margin-bottom: 1rem;
+      color: var(--teal);
+    }
+
+    footer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    footer ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    footer ul a {
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    footer ul a:hover {
+      color: var(--coral);
+    }
+
+    .donate {
+      font-weight: bold;
+      color: var(--coral);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+
+    .contact-form label,
+    .contact-form input,
+    .contact-form textarea,
+    .booking-form label,
+    .booking-form input,
+    .booking-form select {
+        padding: 0.75rem;
+        border: 1px solid var(--gray-dark);
+        border-radius: 4px;
+        font-size: 1rem;
+        width: 100%;
+    }
+    .contact-form label,
+    .booking-form label {
+      border: none;
+    }
+
+    .contact-form .btn {
+        align-self: flex-start;
+    }
+
+    .staff-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .staff-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 300px; /* Limit the width of the card */
+    margin: 3rem auto; /* Center it and add space around it */
+    text-align: center; /* Center the content */
+}
+
+
+    .staff-card img {
+        width: 100%;
+        max-width: 150px;
+        height: auto;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    .staff-card h3 {
+        margin-bottom: 0.5rem;
+        color: var(--teal);
+    }
+
+    .staff-card p {
+        color: var(--gray-dark);
+        font-style: italic;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2000;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+        margin: 5% auto;
+        position: relative;
+        z-index: 2001;
+        transform: translateY(-50px);
+        opacity: 0;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        color: var(--gray-dark);
+        line-height: 1;
+    }
+    
+    .modal.is-visible {
+        display: block;
+    }
+    
+    .modal.is-visible .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .booking-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+		.nav-links li.active-page a {
+  color: goldenrod;
+}
+		
+		.about-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+.author{
+    color:coral;
+    opacity:0.3;
+  }
+		
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="logo.png" alt="AYAO Medical Logo">
+      <div>
+        <h1>AYAO MEDICAL CENTRE</h1>
+        <span>(AYOHEALTH FOUNDATION)</span>
+      </div>
+    </div>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li class="active-page"><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="#">Doctors</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="blog.html" class="blog">Blog</a></li>
+
+      </ul>
+      <div class="hamburger" role="button" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" style="background-image: linear-gradient(rgba(27, 42, 73, 0.8), rgba(27, 42, 73, 0.8)), url('logo.png');">
+    <h2>Our Story and Commitment</h2>
+    <p>Providing compassionate and professional care to our community since 2020.</p>
+</section>
+  		
+  		<section class="staff-card">
+  <img src="Dr1.jpg" alt="Portrait of Dr. Ayao, Chief Medical Officer">
+  <h3>Dr. Ayao</h3>
+  <p>Chief Medical Officer</p>
+</section>
+
+  		
+<section class="about-content">
+  <h2>Our Mission & Vision</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+    <div style="flex: 1; min-width: 300px;">
+      <h3>Our Mission</h3>
+      <p id="mission-text">
+       		Our mission is to provide accessible and exceptional healthcare services to our community...
+      </p>
+    </div>
+   <div class="about-flex-container">
+      <h3>Our Vision</h3>
+      <p id="vision-text">
+        		Our vision is to be a leading healthcare provider, recognized for our commitment to quality...
+      </p>
+   </div>
+  </div>
+</section>
+  </main>
+  
+   <div class="full-width-map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.
+		761635428672!2d-0.18822419999998424!3d5.747417500000004!2m3!1f0!2f0!3f0!3
+		m2!1i1024!2i768!4f13.!3m3!1m2!1s0xfdf7767246d07b9%3A0x27cdfe973aaceb9!2s
+		Ayao%20Medical%20Centre!5e0!3m2!1sen!2sgh!4v1758076754858!5m2!1sen!2sgh"
+      width="100%"
+      height="100%"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li class="active-page"><a href="about.html">About Us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Doctors</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#" class="donate">Donate / Support</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <p>📍 Teiman-Abokobi Road: GM-1570830</p>
+        <p>☎ +233 (0)597117751</p>
+        <p>✉ info@ayaohealth.org</p>
+      </div>
+
+      <div>
+        <h3>Opening Hours</h3>
+        <p>Mon – Fri: 8:00 AM – 8:00 PM</p>
+        <p>Sat: 9:00 AM – 5:00 PM</p>
+        <p>Sun & Holidays: Emergency Only</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION) | 
+      		<span class="author">Designed by Thicktea Media</span>. All rights reserved.</p>
+    </div>
+  </footer>
+  <script>
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+		const missionStatements = [
+  "Our mission is to inspire greatness by focusing on small, consistent steps every day.",
+  "We are dedicated to building a better tomorrow, one compassionate act at a time.",
+  "Our purpose is to empower individuals to achieve their full potential, regardless of circumstance.",
+  "Our mission is to cultivate courage and resilience through the pursuit of excellence.",
+  "We exist to create a ripple effect of positivity and change in our community."
+];
+
+const visionStatements = [
+  "Our vision is a world where every individual is empowered to create their own success.",
+  "We see a future where innovation and empathy go hand in hand to solve global challenges.",
+  "We envision a society where kindness is the new currency and collaboration is the norm.",
+  "Our future is one where we are all pioneers, building a brighter and more inclusive world.",
+  "We dream of a tomorrow where health is a right, not a privilege, and well-being is our greatest wealth."
+];
+
+// Function to get a random message from an array
+function getRandomMessage(messages) {
+  const randomIndex = Math.floor(Math.random() * messages.length);
+  return messages[randomIndex];
+}
+
+// Set the random messages on page load
+document.getElementById('mission-text').textContent = getRandomMessage(missionStatements);
+document.getElementById('vision-text').textContent = getRandomMessage(visionStatements);
+
+  </script>
+</body>
+</html>
