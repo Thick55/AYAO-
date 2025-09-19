@@ -28,14 +28,16 @@
     }
 
     header {
-      background: var(--navy);
+      background: var(--teal);
       color: var(--white);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 1000;
-      position: relative;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .logo {
@@ -106,10 +108,53 @@
     }
     
     .hamburger {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 2rem;
+      height: 2rem;
       cursor: pointer;
-      font-size: 1.5rem;
       z-index: 1001;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    
+    .hamburger span {
+      width: 2rem;
+      height: 0.25rem;
+      background: var(--white);
+      border-radius: 10px;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .hamburger.active span:nth-child(2) {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    header.scrolled {
+      padding: 0.5rem 2rem;
+    }
+    
+    header.scrolled .logo h1 {
+      font-size: 1rem;
+    }
+    
+    header.scrolled .logo span {
+      font-size: 0.7em;
+    }
+    
+    header.scrolled .logo img {
+      width: 30px;
     }
 
     .hero {
@@ -120,7 +165,7 @@
     }
 
     .hero h2 {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
       margin-bottom: 1rem;
     }
 
@@ -166,11 +211,19 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .map-container {
-      margin-top: 2rem;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    /* New full-width map section styles */
+    .full-width-map-section {
+        width: 100%;
+        height: 400px;
+        margin-top: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .full-width-map-section iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
     }
 
     footer {
@@ -181,14 +234,14 @@
 
     .footer-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Default for mobile */
+    grid-template-columns: 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
     .footer-grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 equal columns for larger screens */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -237,6 +290,7 @@
         margin: 2rem auto;
     }
 
+    
     .contact-form input,
     .contact-form textarea {
         padding: 0.75rem;
@@ -282,6 +336,88 @@
         color: var(--gray-dark);
         font-style: italic;
     }
+  
+    /* Modal Overlay and Container */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2000;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Modal Content and Form */
+    .modal-content {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      margin: 5% auto;
+      position: relative;
+      z-index: 2001;
+      transform: translateY(-50px);
+      opacity: 0;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    /* Close Button */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--gray-dark);
+      line-height: 1;
+    }
+
+    /* When the modal is active (visible) */
+    .modal.is-visible {
+      display: block;
+    }
+
+    .modal.is-visible .modal-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .booking-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .booking-form input,
+    .booking-form select {
+      padding: 0.75rem;
+      border: 1px solid var(--gray-dark);
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+  
+    .nav-links li.active-page a {
+      color: goldenrod;
+    }
+  
+    .author{
+      color:coral;
+      opacity:0.3;
+    }
   </style>
 </head>
 <body>
@@ -296,97 +432,115 @@
 
     <nav>
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Doctors</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#" class="donate">Donate</a></li>
+        <li class="active-page"><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contacts.html">Contact</a></li>
+        <li><a href="blog.html" class="blog">Blog</a></li>
       </ul>
-      <div class="hamburger">☰</div>
+      <div class="hamburger" role="button" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </nav>
   </header>
 
-  <section class="hero">
-    <h2>Trusted Healthcare with a Human Touch</h2>
-    <p>Providing quality care at Teiman-Abokobi Road (GM-1570830)</p>
-    <a href="#" class="btn">Book Appointment</a>
-    <a href="#" class="btn">View Our Services</a>
-  </section>
+  <main>
+    <section class="hero">
+      <h2>Trusted Healthcare with a Human Touch</h2>
+      <p>Providing quality health service</p>
+      <a class="btn" id="book-appointment-btn">Book Appointment</a>
+      <a href="services.html" class="btn">View Our Services</a>
+    </section>
 
-  <section id="about">
-    <h2>About Us</h2>
-    <p>AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION) is dedicated to
-      providing accessible, quality healthcare to our community.
-      Our mission is to combine professional expertise with compassionate
-      care to improve lives every day.</p>
-  </section>
+    <section id="about">
+      <h2>About Us</h2>
+      <p>AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION) is dedicated to
+        providing accessible, quality healthcare to our community.
+        Our mission is to combine professional expertise with compassionate
+        care to improve lives every day.</p>
+    </section>
 
-  <section id="services">
-    <h2>Our Services</h2>
-    <div class="services">
-      <div class="service-card">Outpatient Care</div>
-      <div class="service-card">Emergency Services</div>
-      <div class="service-card">Maternity & Child Health</div>
-      <div class="service-card">Diagnostic & Lab</div>
-      <div class="service-card">Pharmacy</div>
-    </div>
-  </section>
-
-  <section id="doctors">
-    <h2>Meet Our Doctors & Staff</h2>
-    <div class="staff-grid">
-      <div class="staff-card">
-        <img src="https://via.placeholder.com/150" alt="Doctor photo">
-        <h3>Dr. Ama Boateng</h3>
-        <p>Chief Medical Officer</p>
+    <section id="services">
+      <h2>Our Services</h2>
+      <div class="services">
+        <div class="service-card">Outpatient Care</div>
+        <div class="service-card">Emergency Services</div>
+        <div class="service-card">Maternity & Child Health</div>
+        <div class="service-card">Diagnostic & Lab</div>
+        <div class="service-card">Eye and Dental</div>
+        <div class="service-card">Pharmacy</div>
       </div>
-      <div class="staff-card">
-        <img src="https://via.placeholder.com/150" alt="Doctor photo">
-        <h3>Dr. Kwame Mensah</h3>
-        <p>Pediatric Specialist</p>
-      </div>
-      <div class="staff-card">
-        <img src="https://via.placeholder.com/150" alt="Doctor photo">
-        <h3>Nurse Efua Asante</h3>
-        <p>Head Nurse</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="contact">
-    <h2>Contact Us</h2>
-    <form class="contact-form">
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" rows="5" required></textarea>
-      <button type="submit" class="btn">Send Message</button>
-    </form>
+    <section id="doctors">
+      <h2>Meet Our Doctors & Staff</h2>
+      <div class="staff-grid">
+        <div class="staff-card">
+          <img src="Dr1.jpg" alt="Portrait of Dr. Ayao, Chief Medical Officer">
+          <h3>Dr. Ayao</h3>
+          <p>Chief Medical Officer</p>
+        </div>
 
-    <div class="map-container">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.219597792612!2d-0.12353398573215914!3d5.71960249591485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfd232c45e54d3d3%3A0x6b6d51608622f67!2sAYAO%20MEDICAL%20CENTRE%20(AYOHEALTH%20FOUNDATION)!5e0!3m2!1sen!2sgh!4v1675765678901!5m2!1sen!2sgh"
-        width="100%"
-        height="400"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </div>
-  </section>
+        <div class="staff-card">
+          <img src="Dr1.jpg" alt="Doctor photo">
+          <h3>Dr.Ayao</h3>
+          <p>Pediatric Specialist</p>
+        </div>
+        <div class="staff-card">
+          <img src="Dr1.jpg" alt="Doctor photo">
+          <h3>Nurse Efua Asante</h3>
+          <p>Head Nurse</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <form class="contact-form">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" required placeholder="Full name">
+      
+        <label for="number">Your Phone Number</label>
+        <input type="number" id="number" required placeholder="Your phone number">
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" required placeholder="Your valid email">
+
+        <label for="message">Your Message</label>
+        <textarea id="message" rows="5" required></textarea>
+
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <div class="full-width-map-section">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.
+		761635428672!2d-0.18822419999998424!3d5.747417500000004!2m3!1f0!2f0!3f0!3
+		m2!1i1024!2i768!4f13.!3m3!1m2!1s0xfdf7767246d07b9%3A0x27cdfe973aaceb9!2s
+		Ayao%20Medical%20Centre!5e0!3m2!1sen!2sgh!4v1758076754858!5m2!1sen!2sgh"
+      width="100%"
+      height="100%"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  </div>
 
   <footer>
     <div class="footer-grid">
       <div>
         <h3>Quick Links</h3>
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Doctors</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#" class="donate">Donate / Support</a></li>
+          <li class="current"><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="contacts.html">Contact</a></li>
+          <li><a href="blog.html" class="blog">Blog</a></li>
         </ul>
       </div>
 
@@ -406,16 +560,94 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© 2025 AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION). All rights reserved.</p>
+      <p>© 2025 AYAO MEDICAL CENTRE (AYOHEALTH FOUNDATION) |
+        <span class="author">Designed by Thicktea Media</span>
+        . All rights reserved.</p>
     </div>
   </footer>
+  
+  <div id="booking-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2>Book an Appointment</h2>
+      <form class="booking-form">
+        <label for="booking-name">Your Name</label>
+        <input type="text" id="booking-name" required>
+
+        <label for="booking-email">Your Email</label>
+        <input type="email" id="booking-email" required>
+
+        <label for="booking-date">Preferred Date</label>
+        <input type="date" id="booking-date" required>
+
+        <label for="booking-service">Service</label>
+        <select id="booking-service">
+          <option value="">Select a service...</option>
+          <option value="outpatient">OPD/Outpatient Care</option>
+          <option value="emergency">Emergency Services</option>
+          <option value="maternity">Maternity & Child Health</option>
+          <option value="diagnostic">Diagnostic & Lab</option>
+          <option value="diagnostic">Eye and Dental</option>
+        </select>
+        <button type="submit" class="btn">Submit Booking</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
     hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        const isExpanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
+        hamburger.setAttribute('aria-expanded', !isExpanded);
+    });
+  
+    const header = document.querySelector('header');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+  
+    const bookingBtn = document.getElementById('book-appointment-btn');
+    const bookingModal = document.getElementById('booking-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const modalOverlay = document.querySelector('.modal-overlay');
+
+    // Function to show the modal
+    function showModal() {
+      bookingModal.classList.add('is-visible');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Function to hide the modal
+    function hideModal() {
+      bookingModal.classList.remove('is-visible');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Event listeners
+    bookingBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showModal();
+    });
+
+    closeBtn.addEventListener('click', hideModal);
+    modalOverlay.addEventListener('click', hideModal);
+
+    // Hide modal if the Escape key is pressed
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        hideModal();
+      }
     });
   </script>
 </body>
 </html>
+
